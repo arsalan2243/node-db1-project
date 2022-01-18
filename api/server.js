@@ -1,7 +1,18 @@
-const express = require("express");
+const express = require("express")
+const accountsRouter = require("./accounts/accounts-router")
+const server = express()
 
-const server = express();
+server.use(express.json())
 
-server.use(express.json());
+server.use("/api/accounts", accountsRouter)
 
-module.exports = server;
+server.use("*", handleError)
+module.exports = server
+
+function handleError(err, req, res, next) {
+  // eslint-disable-line
+  res.status(err.status || 500).json({
+    Error: "somethign went wrong",
+    message: err.message,
+  })
+}
